@@ -5,7 +5,7 @@ import { API_KEY } from "@env";
 
 const HomePage = () => {
   return (
-    <View className="flex-1">
+    <View className="flex-1 ">
       <Text style={{ color: "black" }}>HomePage</Text>
     </View>
   );
