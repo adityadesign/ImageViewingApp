@@ -6,11 +6,13 @@ import {
   TextInput,
   Text,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import { Image } from "expo-image";
 import { createClient } from "pexels";
 import { API_KEY } from "@env";
 import { AppContext } from "./Context";
+import { LinearGradient } from "expo-linear-gradient";
 
 const client = createClient(API_KEY);
 
@@ -56,20 +58,25 @@ const HomePage = () => {
 
   const Item = ({ item }) => {
     return (
-      <TouchableOpacity className="w-[50%] p-1">
-        <Image
-          className="h-[270px] w-[100%] rounded-md"
-          source={{ uri: item.src.medium }}
-          contentFit="cover"
-          contentPosition="center"
-          transition={500}
-        />
+      <TouchableOpacity className="w-[50%] p-1 relative">
+        <LinearGradient colors={['transparent', 'black']} className="rounded-md">
+          <Image
+            className="h-[270px] w-[100%] rounded-md opacity-80 -z-10"
+            source={{ uri: item.src.medium }}
+            contentFit="cover"
+            contentPosition="center"
+            transition={500}
+          />
+        </LinearGradient>
+        <Text className="absolute bottom-4 left-3 drop-shadow-md w-[60%] text-white font-bold text-lg">
+          {item.photographer}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View className="flex-1 ">
+    <View className="flex-1 bg-[#1f1f1f]">
       {isSearch && (
         <TextInput
           className="border-[1px] bg-white mx-4 mt-4 rounded-md p-1 border-gray-400"
