@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity, View, FlatList } from "react-native";
 import { Image } from "expo-image";
 import { createClient } from "pexels";
@@ -144,11 +144,10 @@ const HomePage = () => {
         src: [Object],
         url: "https://www.pexels.com/photo/river-flowing-in-green-valley-17038848/",
         width: 4672,
-      }
+      },
     ],
     total_results: 8000,
   });
-
   // useEffect(() => {
   //   client.photos.search({ query, per_page: 10 }).then((photos) => {
   //     setData(photos);
