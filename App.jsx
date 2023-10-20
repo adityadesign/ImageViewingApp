@@ -4,7 +4,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import HomePage from "./app/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Feather } from "@expo/vector-icons"
+import { Feather } from "@expo/vector-icons";
+import { useState } from "react";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +31,7 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "Imager",
               headerRight: () => <NavIcons type="search" />,
-              statusBarStyle: 'dark',
+              statusBarStyle: "dark",
             }}
           />
         </Stack.Navigator>
