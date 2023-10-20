@@ -3,11 +3,13 @@ import { TouchableOpacity, View, FlatList } from "react-native";
 import { Image } from "expo-image";
 import { createClient } from "pexels";
 import { API_KEY } from "@env";
+import { AppContext } from "./Context";
 
 const client = createClient(API_KEY);
 const query = "Nature";
 
 const HomePage = () => {
+  const search = useContext(AppContext)
   const [data, setData] = useState({
     next_page:
       "https://api.pexels.com/v1/search/?page=2&per_page=10&query=Nature",

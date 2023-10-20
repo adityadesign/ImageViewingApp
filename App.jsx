@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
+import { AppContext } from "./app/Context";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,22 +28,24 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={HomePage}
-            initialParams={menuSelected}
-            options={{
-              headerLeft: () => <NavIcons type="menu" />,
-              headerTitleAlign: "center",
-              headerTitle: "Imager",
-              headerRight: () => <NavIcons type="search" />,
-              statusBarStyle: "dark",
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppContext.Provider value={searchSelected}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen
+              name="Home"
+              component={HomePage}
+              initialParams={menuSelected}
+              options={{
+                headerLeft: () => <NavIcons type="menu" />,
+                headerTitleAlign: "center",
+                headerTitle: "Imager",
+                headerRight: () => <NavIcons type="search" />,
+                statusBarStyle: "dark",
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContext.Provider>
     </SafeAreaProvider>
   );
 }
