@@ -3,7 +3,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import HomePage from "./app/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { AppContext } from "./app/Context";
 
@@ -21,7 +21,11 @@ export default function App() {
   const NavIcons = ({ type }) => {
     return (
       <TouchableOpacity onPress={() => handleChange(type)}>
-        <Feather name={`${type}`} size={24} color="black" />
+        {searchSelected && type === "search" ? (
+          <AntDesign name="up" size={24} color="black" />
+        ) : (
+          <Feather name={`${type}`} size={24} color="black" />
+        )}
       </TouchableOpacity>
     );
   };
