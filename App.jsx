@@ -7,22 +7,26 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { AppContext } from "./app/Context";
 
+//for navigation if needed.
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  //variables for search and hamburger icons.
   const [menuSelected, setMenuSelected] = useState(false);
   const [searchSelected, setSearchSelected] = useState(false);
 
+  //handling the change of state when a specific button is clicked.
   const handleChange = (type) => {
     if (type === "menu") setMenuSelected((prev) => !prev);
     else if (type === "search") setSearchSelected((prev) => !prev);
   };
 
+  //to display the icons on either side of the header which takes type as a parameter.
   const NavIcons = ({ type }) => {
     return (
       <TouchableOpacity onPress={() => handleChange(type)} className="my-3">
         {searchSelected && type === "search" ? (
-          <AntDesign name="up" size={24} color="white" />
+          <AntDesign name="up" size={24} color="white" />    //when search is clicked the icon needs to be changed to 'up'
         ) : (
           <Feather name={`${type}`} size={24} color="white" />
         )}
@@ -46,7 +50,6 @@ export default function App() {
                 headerRight: () => <NavIcons type="search" />,
                 statusBarStyle: "dark",
                 headerTintColor: "white",
-                headerBackVisible: false,
                 headerStyle: { backgroundColor: "#1f1f1f" },
                 headerTitleStyle: { fontSize: 22 },
               }}

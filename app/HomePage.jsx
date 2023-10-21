@@ -15,6 +15,7 @@ import { AppContext } from "./Context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
+//Using API_KEY to authenticate with the Pexels API
 const client = createClient(API_KEY);
 
 const HomePage = () => {
@@ -23,8 +24,9 @@ const HomePage = () => {
   const [searchText, setSearchText] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [data, setData] = useState();
-  const [defaultData, setDefaultData] = useState();
+  const [defaultData, setDefaultData] = useState(); //this is used when the searchText is empty.
 
+  //Get the data from the API when the app loads for the first time and only runs one time.
   useEffect(() => {
     setIsLoading(true);
     client.photos.curated({ per_page: 10 }).then((photos) => {
@@ -34,11 +36,14 @@ const HomePage = () => {
     });
   }, []);
 
+  //Debounce method for getting the data from the API for search queries, which runs only when searchText or pageNumber is changed.
   useEffect(() => {
+    //When the searchText is empty assign the defaultData to display the data instead of empty screen.
     if (searchText.length === 0) {
       setData(defaultData);
       return;
     }
+    //Debounce method
     const timer = setTimeout(() => {
       if (searchText.length > 0) {
         setIsLoading(true);
@@ -57,6 +62,7 @@ const HomePage = () => {
     return () => clearTimeout(timer);
   }, [searchText, pageNumber]);
 
+  //Function to display the single image, used inside the map function.
   const Item = ({ item }) => {
     return (
       <TouchableOpacity className="w-[50%] p-1 relative" style={styles.image}>
@@ -82,11 +88,12 @@ const HomePage = () => {
 
   return (
     <View className="flex-1 bg-[#121212]">
+      {/* Text input for search which only appears when search icon is clicked. */}
       {isSearch && (
         <View className="border-[1px] bg-white mx-4 mt-4 rounded-md p-1 border-gray-400 flex-row justify-between">
           <TextInput
             className="flex-1"
-            onChangeText={setSearchText}
+            onChangeText={(text) => [setSearchText(text), setPageNumber(1)]}
             value={searchText}
             placeholder="Search"
           />
@@ -95,12 +102,15 @@ const HomePage = () => {
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Display the searchText if its available */}
       <View className="mx-4 mt-4">
         <Text className="text-white font-semibold text-lg">
-          {searchText.length > 0 ? "Searched" : "Curated"} Images:{" "}
+          {searchText.length > 0 ? "Searched" : "Curated"} Images:
           {searchText.length > 0 && searchText}
         </Text>
       </View>
+
       {isLoading ? (
         <ActivityIndicator className="flex-1" size={"50px"} />
       ) : (
@@ -161,6 +171,7 @@ const HomePage = () => {
 
 export default HomePage;
 
+// for only adding elevation property for image cards.
 const styles = StyleSheet.create({
   image: {
     elevation: 10,
