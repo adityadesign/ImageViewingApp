@@ -2,17 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   TouchableOpacity,
   View,
-  FlatList,
   TextInput,
   Text,
   ActivityIndicator,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { Image } from "expo-image";
 import { createClient } from "pexels";
 import { API_KEY } from "@env";
 import { AppContext } from "./Context";
 import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 const client = createClient(API_KEY);
 
@@ -20,7 +21,7 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isSearch = useContext(AppContext);
   const [searchText, setSearchText] = useState("");
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [data, setData] = useState();
   const [defaultData, setDefaultData] = useState();
 
@@ -58,8 +59,11 @@ const HomePage = () => {
 
   const Item = ({ item }) => {
     return (
-      <TouchableOpacity className="w-[50%] p-1 relative">
-        <LinearGradient colors={['transparent', 'black']} className="rounded-md">
+      <TouchableOpacity className="w-[50%] p-1 relative" style={styles.image}>
+        <LinearGradient
+          colors={["transparent", "black"]}
+          className="rounded-md"
+        >
           <Image
             className="h-[270px] w-[100%] rounded-md opacity-80 -z-10"
             source={{ uri: item.src.medium }}
@@ -68,67 +72,86 @@ const HomePage = () => {
             transition={500}
           />
         </LinearGradient>
-        <Text className="absolute bottom-4 left-3 drop-shadow-md w-[60%] text-white font-bold text-lg">
-          {item.photographer}
-        </Text>
+        <View className="absolute bottom-4 left-3 drop-shadow-md w-[100%]">
+          <Text className="text-white font-bold text-[16px]">Artist:</Text>
+          <Text className="text-gray-400 py-1">{item.photographer}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View className="flex-1 bg-[#1f1f1f]">
+    <View className="flex-1 bg-[#121212]">
       {isSearch && (
-        <TextInput
-          className="border-[1px] bg-white mx-4 mt-4 rounded-md p-1 border-gray-400"
-          onChangeText={setSearchText}
-          value={searchText}
-          autoFocus={true}
-          placeholder="Search"
-        />
+        <View className="border-[1px] bg-white mx-4 mt-4 rounded-md p-1 border-gray-400 flex-row justify-between">
+          <TextInput
+            className="flex-1"
+            onChangeText={setSearchText}
+            value={searchText}
+            placeholder="Search"
+          />
+          <TouchableOpacity onPress={() => setSearchText("")}>
+            <Ionicons name="close-circle-sharp" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       )}
+      <View className="mx-4 mt-4">
+        <Text className="text-white font-semibold text-lg">
+          {searchText.length > 0 ? "Searched" : "Curated"} Images:{" "}
+          {searchText.length > 0 && searchText}
+        </Text>
+      </View>
       {isLoading ? (
         <ActivityIndicator className="flex-1" size={"50px"} />
       ) : (
         <>
           {data && (
-            <>
-              <FlatList
-                className="m-3"
-                data={data.photos}
-                numColumns={2}
-                renderItem={({ item }) => <Item item={item} />}
-                keyExtractor={(item) => item.id}
-              />
-              {data !== defaultData && (
-                <View className="flex-row justify-center gap-5 mb-3">
-                  <TouchableOpacity
-                    onPress={() => [setPageNumber(1), setIsLoading(true)]}
-                  >
-                    <Text>1</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => [setPageNumber(2), setIsLoading(true)]}
-                  >
-                    <Text>2</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => [setPageNumber(3), setIsLoading(true)]}
-                  >
-                    <Text>3</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => [setPageNumber(4), setIsLoading(true)]}
-                  >
-                    <Text>4</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => [setPageNumber(5), setIsLoading(true)]}
-                  >
-                    <Text>5</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </>
+            <ScrollView>
+              <View className="flex-row flex-wrap mx-2 mt-3">
+                {data?.photos.map((item) => {
+                  return <Item item={item} key={item?.id} />;
+                })}
+                {data !== defaultData && (
+                  <View className="flex-row justify-evenly w-[100%] mb-3 mt-1">
+                    <TouchableOpacity
+                      className="flex-row"
+                      onPress={() => [
+                        setPageNumber((prev) => prev - 1),
+                        setIsLoading(true),
+                      ]}
+                      disabled={pageNumber === 1}
+                    >
+                      <MaterialIcons
+                        name="navigate-before"
+                        size={20}
+                        color={`${pageNumber === 1 ? "grey" : "white"}`}
+                      />
+                      <Text
+                        className={`text-white ${
+                          pageNumber === 1 && "text-gray-500"
+                        }`}
+                      >
+                        Prev
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="flex-row"
+                      onPress={() => [
+                        setPageNumber((prev) => prev + 1),
+                        setIsLoading(true),
+                      ]}
+                    >
+                      <Text className="text-white">Next</Text>
+                      <MaterialIcons
+                        name="navigate-next"
+                        size={20}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            </ScrollView>
           )}
         </>
       )}
@@ -137,3 +160,9 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+const styles = StyleSheet.create({
+  image: {
+    elevation: 10,
+  },
+});

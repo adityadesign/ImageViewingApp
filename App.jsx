@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import HomePage from "./app/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
@@ -20,11 +20,11 @@ export default function App() {
 
   const NavIcons = ({ type }) => {
     return (
-      <TouchableOpacity onPress={() => handleChange(type)}>
+      <TouchableOpacity onPress={() => handleChange(type)} className="my-3">
         {searchSelected && type === "search" ? (
-          <AntDesign name="up" size={24} color="black" />
+          <AntDesign name="up" size={24} color="white" />
         ) : (
-          <Feather name={`${type}`} size={24} color="black" />
+          <Feather name={`${type}`} size={24} color="white" />
         )}
       </TouchableOpacity>
     );
@@ -33,18 +33,22 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AppContext.Provider value={searchSelected}>
+        <StatusBar style="light" backgroundColor="#121212" />
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
               component={HomePage}
-              initialParams={menuSelected}
               options={{
                 headerLeft: () => <NavIcons type="menu" />,
                 headerTitleAlign: "center",
                 headerTitle: "Imager",
                 headerRight: () => <NavIcons type="search" />,
                 statusBarStyle: "dark",
+                headerTintColor: "white",
+                headerBackVisible: false,
+                headerStyle: { backgroundColor: "#1f1f1f" },
+                headerTitleStyle: { fontSize: 22 },
               }}
             />
           </Stack.Navigator>
