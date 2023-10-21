@@ -16,9 +16,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 //Using API_KEY to authenticate with the Pexels API
-const client = createClient(API_KEY);
+export const client = createClient(API_KEY);
 
-const HomePage = () => {
+const HomePage = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const isSearch = useContext(AppContext);
   const [searchText, setSearchText] = useState("");
@@ -65,7 +65,7 @@ const HomePage = () => {
   //Function to display the single image, used inside the map function.
   const Item = ({ item }) => {
     return (
-      <TouchableOpacity className="w-[50%] p-1 relative" style={styles.image}>
+      <TouchableOpacity className="w-[50%] p-1 relative" style={styles.image} onPress={()=> navigation.navigate('Details', {id: item.id})}>
         <LinearGradient
           colors={["transparent", "black"]}
           className="rounded-md"
@@ -79,7 +79,7 @@ const HomePage = () => {
           />
         </LinearGradient>
         <View className="absolute bottom-4 left-3 drop-shadow-md w-[100%]">
-          <Text className="text-white font-bold text-[16px]">Artist:</Text>
+          {/* <Text className="text-white font-bold text-[16px]">Artist:</Text> */}
           <Text className="text-gray-400 py-1">{item.photographer}</Text>
         </View>
       </TouchableOpacity>
