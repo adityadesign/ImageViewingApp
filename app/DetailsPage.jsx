@@ -7,6 +7,7 @@ import { ImageBackground } from "react-native";
 import { BlurView } from "expo-blur";
 
 const DetailsPage = ({ route }) => {
+  //Get the Id from the Home page and call the API using that Id.
   const [details, setDetails] = useState();
   useEffect(() => {
     client.photos.show({ id: route.params.id }).then((photo) => {
@@ -14,6 +15,7 @@ const DetailsPage = ({ route }) => {
     });
   }, []);
 
+  //For diaplaying links of photographer and image url.
   const DisplayLinks = ({ type, link }) => {
     return (
       <Text className="text-white font-bold text-base">
@@ -28,6 +30,7 @@ const DetailsPage = ({ route }) => {
   return (
     <View className="flex-1 bg-[#1f1f1f]">
       {details ? (
+        //Background blur image
         <ImageBackground
           source={{ uri: details.src.large }}
           resizeMode="cover"
@@ -36,6 +39,7 @@ const DetailsPage = ({ route }) => {
         >
           <ScrollView>
             <View className="p-8 ">
+              {/* Main image */}
               <Image
                 className="w-full h-[450px] mb-3 rounded-md"
                 source={{ uri: details.src.large }}
@@ -44,6 +48,8 @@ const DetailsPage = ({ route }) => {
                 transition={500}
                 style={{ elevation: 10 }}
               />
+
+              {/* Blured view to display the details of the image */}
               <BlurView
                 intensity={50}
                 className="p-4 mt-4"

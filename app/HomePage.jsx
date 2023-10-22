@@ -18,7 +18,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 //Using API_KEY to authenticate with the Pexels API
 export const client = createClient(API_KEY);
 
-const HomePage = ({navigation}) => {
+const HomePage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const isSearch = useContext(AppContext);
   const [searchText, setSearchText] = useState("");
@@ -65,7 +65,11 @@ const HomePage = ({navigation}) => {
   //Function to display the single image, used inside the map function.
   const Item = ({ item }) => {
     return (
-      <TouchableOpacity className="w-[50%] p-1 relative" style={styles.image} onPress={()=> navigation.navigate('Details', {id: item.id})}>
+      <TouchableOpacity
+        className="w-[50%] p-1 relative"
+        style={styles.image}
+        onPress={() => navigation.navigate("Details", { id: item.id })}  //onPress navigate to Details page with Id parameter.
+      >
         <LinearGradient
           colors={["transparent", "black"]}
           className="rounded-md"
@@ -115,12 +119,15 @@ const HomePage = ({navigation}) => {
         <ActivityIndicator className="flex-1" size={"50px"} />
       ) : (
         <>
+          {/* Displayng Images through map */}
           {data && (
             <ScrollView>
               <View className="flex-row flex-wrap mx-2">
                 {data?.photos.map((item) => {
                   return <Item item={item} key={item?.id} />;
                 })}
+
+                {/* Previous and Next buttons */}
                 {data !== defaultData && (
                   <View className="flex-row justify-evenly w-[100%] mb-3 mt-1">
                     <TouchableOpacity
