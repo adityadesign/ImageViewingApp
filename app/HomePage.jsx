@@ -104,9 +104,9 @@ const HomePage = ({navigation}) => {
       )}
 
       {/* Display the searchText if its available */}
-      <View className="mx-4 mt-4">
+      <View className="m-4">
         <Text className="text-white font-semibold text-lg">
-          {searchText.length > 0 ? "Searched" : "Curated"} Images:
+          {searchText.length > 0 ? "Searched" : "Curated"} Images:{" "}
           {searchText.length > 0 && searchText}
         </Text>
       </View>
@@ -117,7 +117,7 @@ const HomePage = ({navigation}) => {
         <>
           {data && (
             <ScrollView>
-              <View className="flex-row flex-wrap mx-2 mt-3">
+              <View className="flex-row flex-wrap mx-2">
                 {data?.photos.map((item) => {
                   return <Item item={item} key={item?.id} />;
                 })}

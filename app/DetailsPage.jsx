@@ -3,6 +3,8 @@ import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { client } from "./HomePage";
 import { A } from "@expo/html-elements";
+import { ImageBackground } from "react-native";
+import { BlurView } from "expo-blur";
 
 const DetailsPage = ({ route }) => {
   const [details, setDetails] = useState();
@@ -24,30 +26,44 @@ const DetailsPage = ({ route }) => {
   };
 
   return (
-    <View className="flex-1 bg-[#121212] p-4">
+    <View className="flex-1 bg-[#1f1f1f]">
       {details ? (
-        <View>
-          <Image
-            className="w-full h-[70%] mb-3 rounded-md"
-            source={{ uri: details.src.large }}
-            contentFit="cover"
-            contentPosition="center"
-            transition={500}
-          />
+        <ImageBackground
+          source={{ uri: details.src.large }}
+          resizeMode="cover"
+          blurRadius={10}
+          style={{flex:1}}
+        >
           <ScrollView>
-            <Text className="text-white font-bold text-2xl mb-3">
-              {details.alt.length > 0 ? details.alt : "Details"}
-            </Text>
-            <Text className="text-white font-bold text-base">
-              Photographer:{" "}
-              <Text className="text-gray-300 font-normal text-base">
-                {details.photographer}
-              </Text>
-            </Text>
-            <DisplayLinks type={"PhotographerLink"} link={details.photographer_url} />
-            <DisplayLinks type={"Image Url"} link={details.url} />
+            <View className="p-8 ">
+              <Image
+                className="w-full h-[450px] mb-3 rounded-md"
+                source={{ uri: details.src.large }}
+                contentFit="cover"
+                contentPosition="center"
+                transition={500}
+                style={{ elevation: 10 }}
+              />
+              <BlurView
+                intensity={50}
+                className="p-4 mt-4"
+                style={{ elevation: 10, borderRadius: 10, overflow: "hidden" }}
+              >
+                <Text className="text-white font-bold text-2xl mb-3">
+                  {details.alt.length > 0 ? details.alt : "Details"}
+                </Text>
+                <Text className="text-white font-bold text-base">
+                  Photographer: {details.photographer}
+                </Text>
+                <DisplayLinks
+                  type={"PhotographerLink"}
+                  link={details.photographer_url}
+                />
+                <DisplayLinks type={"Image Url"} link={details.url} />
+              </BlurView>
+            </View>
           </ScrollView>
-        </View>
+        </ImageBackground>
       ) : (
         <ActivityIndicator className="flex-1" size={"50px"} />
       )}
